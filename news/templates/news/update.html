@@ -1,0 +1,41 @@
+{% extends 'main/layout/layout.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Update Article #{{ article_form.title.value }}{% endblock %}
+
+{% block content %}
+    <div class="container py-5">
+        <h1 class="mb-4">Update Article</h1>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="mb-4">
+                {{ article_form|crispy }}
+            </div>
+
+            <h3 class="mt-5">Images</h3>
+            {{ formset.management_form }}
+
+            <div class="row g-4">
+                {% for form in formset %}
+                    <div class="col-md-6">
+                        <div class="card p-3">
+                            {{ form|crispy }}
+                            {% if form.instance.pk %}
+                                <div class="mt-2">
+                                    <img src="{{ form.instance.image.url }}" class="img-fluid rounded" style="max-width: 150px;">
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-success mt-2">Update Article</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

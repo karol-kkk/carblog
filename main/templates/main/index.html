@@ -1,0 +1,49 @@
+{% extends 'main/layout/layout.html' %}
+
+{% block title%}Homepage{% endblock %}
+
+{% block content%}
+<section style="background-image: url('/static/main/img/20706862853_d9367e8332_k.jpg'); background-size: cover; background-position: center; height: 100vh; position: relative; display: flex; justify-content: center; align-items: center;">
+    <div class="overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1;"></div>
+    <div class="container text-center content" style="position: relative; z-index: 2;">
+      <h1 class="display-3 text-white fw-bold">Welcome to abcdegfdhdfhf</h1>
+      <p class="lead text-white mb-4">Latest news and builds</p>
+      <a href="about" class="btn btn-primary btn-lg">About us</a>
+    </div>
+  </section>
+    <div class="container d-flex justify-content-center py-5">
+        <div class="w-100" style="max-width: 40%;"> <!-- Increased max-width of the block -->
+            {% if recent_articles %}
+            <h1 class="text-center">Recent Articles</h1>
+    <div id="articleCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            {% for article in recent_articles %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="card">
+                        {% if article.thumbnail %}
+                            <img src="{{ article.thumbnail.url }}" class="card-img-top" alt="Thumbnail">
+                        {% endif %}
+                        <div class="card-body d-flex flex-column justify-content-center text-center">
+                            <h5 class="card-title">
+                                <a href="/news/{{ article.id }}" class="text-decoration-none">{{ article.title }}</a>
+                            </h5>
+                            <p class="card-text text-muted">{{ article.excerpt|truncatewords:20 }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#articleCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#articleCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+{% endif %}
+
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'main/layout/layout.html' %}
+
+{% block title%}Add post{% endblock %}
+
+{% block content%}
+<div class="p-5">
+    <form method="post" enctype="multipart/form-data" class="form d-flex flex-column gap-2">
+        {% csrf_token %}
+
+        {{ form.title }}
+        {{ form.excerpt }}
+        {{ form.body }}
+        {{ form.published_at }}
+
+        <div id="image-formset" class="d-flex flex-column gap-2 mt-3">
+            {{ formset.management_form }}
+            {% for subform in formset %}
+                <div class="image-form d-flex flex-column gap-1 border p-2">
+                    {{ subform.image.label_tag }} {{ subform.image }}
+                    {{ subform.description.label_tag }} {{ subform.description }}
+                    {{ subform.DELETE}}
+                </div>
+            {% endfor %}
+        </div>
+
+        <button type="button" id="add-image" class="btn btn-secondary">Add another image</button>
+
+        <span>{{ error }}</span>
+        <button {% if not user.is_authenticated %} disabled {% endif %} class="btn btn-success mt-2" type="submit">Add post</button>
+    </form>
+</div>
+
+<script>
+    const addBtn = document.getElementById('add-image');
+    const formsetDiv = document.getElementById('image-formset');
+    const totalForms = document.querySelector('#id_images-TOTAL_FORMS');
+
+    addBtn.addEventListener('click', function () {
+        const currentFormCount = parseInt(totalForms.value);
+        const formCopyTarget = formsetDiv.querySelector('.image-form');
+        const newForm = formCopyTarget.cloneNode(true);
+
+        // Update form index in cloned inputs
+        newForm.innerHTML = newForm.innerHTML.replace(/images-(\d)-/g, `images-${currentFormCount}-`);
+
+        // Clear values
+        newForm.querySelectorAll('input').forEach(input => {
+            if (input.type === 'file' || input.type === 'text') input.value = '';
+        });
+
+        formsetDiv.appendChild(newForm);
+        totalForms.value = currentFormCount + 1;
+    });
+</script>
+
+{% endblock %}

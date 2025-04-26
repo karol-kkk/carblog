@@ -1,0 +1,60 @@
+{% extends 'main/layout/layout.html' %}
+
+{% block title%}(#{{ post.id }}) {{ post.title }}{% endblock %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center w-100">
+        <h1>(#{{ post.id }}) {{ post.title }}</h1>
+        {% if request.user.id == post.author.id %}
+        <div>
+            <a href="/forum/{{ post.id }}/update" class="btn btn-info">Update</a>
+            <a href="/forum/{{ post.id }}/delete" class="btn btn-danger">Delete</a>
+
+        </div>
+        {% endif %}
+    </div>
+    <div class="d-flex flex-column gap-4">
+        <p>Post by: {{ post.author.username }}</p>
+        <p>Published at: {{ post.published_at }}</p>
+        <p>{{ post.body }}</p>
+
+        {% if post.images.all %}
+            <div class="d-flex flex-wrap gap-3">
+                {% for img in post.images.all %}
+                    <div>
+                        <img src="{{ img.image.url }}" alt="Post image" style="max-width: 70%; height: auto;" class="">
+                        <p>{{ img.description }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <h3>Comments</h3>
+        
+        {{ comment.author.username }}
+            {% for comment in comments %}
+                <div class="comments-list">
+                    <strong>{{ comment.author }}</strong> ({{ comment.created_at|date:"SHORT_DATETIME_FORMAT" }}):<br>
+                    {{ comment.body }}
+                </div>
+                {% if comment.author.id == request.user.id %}
+            <form action="{% url 'delete_comment' comment.id %}" method="POST" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+            {% endif %}
+            {% empty %}
+                <p>No comments yet.</p>
+            {% endfor %}
+    {% if user.is_authenticated %}
+    <hr>
+    <h3>Leave a Comment</h3>
+    <form id="comment-form" method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% endif %}
+    </div>
+    
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'main/layout/layout.html' %}
+
+{% block title %}Webpage news{% endblock %}
+
+{% block content %}
+<h1 class="text-center mb-5">News</h1>
+
+<div class="container d-flex justify-content-center py-5">
+    <div class="w-100" style="max-width: 40%;"> <!-- Increased max-width of the block -->
+        {% if news %}
+            <div class="d-flex flex-column gap-4">
+                {% for article in news %}
+                    <div class="border rounded p-4 d-flex align-items-center" style="min-height: 200px;"> <!-- Increased padding and min-height -->
+                        <div class="me-3" style="flex: 0 0 200px;"> <!-- Increased image container size -->
+                            {% if article.thumbnail %}
+                                <img src="{{ article.thumbnail.url }}" alt="Thumbnail" class="img-fluid rounded" style="width: 200px; height: auto;"> <!-- Increased image size -->
+                            {% endif %}
+                        </div>
+                        <div class="flex-grow-1">
+                            <h5 class="mb-1"><a href="/news/{{ article.id }}" class="text-decoration-none">{{ article.title }}</a></h5>
+                            <p class="mb-0 text-muted">{{ article.excerpt }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-center text-muted">No news for now. Come back later!</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
