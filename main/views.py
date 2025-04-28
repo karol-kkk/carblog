@@ -12,54 +12,7 @@ def index(request):
 
 
 def events(request):
-    values = {
-        'events': [
-            {
-                'event': 'Drift Masters Round 1',
-                'country': 'Italy',
-                'date': '25-26.04.2025',
-                'track': 'Vallelunga Circuit',
-            },
-            {
-                'event': 'Drift Masters Round 2',
-                'country': 'Spain',
-                'date': '17-18.05.2025',
-                'track': 'Circuito de Madrid Jarama - RACE',
-            },
-            {
-                'event': 'Drift Masters Round 3',
-                'country': 'Finland',
-                'date': '06-07.06.2025',
-                'track': 'Power Park Huvivaltio',
-            },
-            {
-                'event': 'Drift Masters Round 4',
-                'country': 'Ireland',
-                'date': '28-29.06.2025',
-                'track': 'Mondello Park',
-            },
-            {
-                'event': 'Drift Masters Round 5',
-                'country': 'Latvia',
-                'date': '25-26.07.2025',
-                'track': 'Bikernieku Trase',
-            },
-            {
-                'event': 'Drift Masters Round 6',
-                'country': 'Germany',
-                'date': '14-16.08.2025',
-                'track': 'Ferropolis',
-            },
-            {
-                'event': 'Drift Masters Round 7',
-                'country': 'Poland',
-                'date': '12-13.09.2025',
-                'track': 'PGE Narodowy',
-            },
-        ]
-    }
-
-    return render(request, 'main/events.html', values)
+    return render(request, 'main/events.html')
 
 def about(request):
     return render(request, 'main/about.html')

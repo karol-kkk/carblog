@@ -18,6 +18,7 @@ def post_home(request):
     posts = Posts.objects.all().order_by('-published_at')
     return render(request, 'forum/index.html', {'posts': posts})
 
+@login_required
 def post_create(request):
     error = ''
     if request.method == 'POST':
@@ -72,26 +73,40 @@ class PostDetailView(DetailView):
             return redirect('post_show', pk=self.object.pk)
         return self.render_to_response(self.get_context_data(form=form))
 
-from django.http import HttpResponseForbidden
+class PostUpdateView(UpdateView):
+    model = Posts
+    form_class = PostsForm
+    template_name = 'forum/update.html'
+    context_object_name = 'post'
 
-def update_post(request, pk):
-    post = get_object_or_404(Posts, pk=pk)
+    def get_object(self, queryset=None):
+        post = get_object_or_404(Posts, pk=self.kwargs['pk'])
+        return post
 
-    if post.author != request.user:
-        return HttpResponseForbidden("You are not allowed to update this post.")
+    def dispatch(self, request, *args, **kwargs):
+        post = self.get_object()
+        if post.author != request.user:
+            return HttpResponseForbidden("You are not allowed to access this post.")
+        return super().dispatch(request, *args, **kwargs)  
 
-    post_form = PostsForm(request.POST or None, instance=post)
-    formset = PostImageFormSet(request.POST or None, request.FILES or None, instance=post)
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        if post.author != self.request.user:
+            return HttpResponseForbidden("You are not allowed to update this post.")
+        
+        formset = PostImageFormSet(self.request.POST, self.request.FILES, instance=post)
+        if formset.is_valid():
+            post.save() 
+            formset.save() 
+            return redirect('post_show', pk=post.pk)
+        
+        return self.render_to_response({'form': form, 'formset': formset})
 
-    if post_form.is_valid() and formset.is_valid():
-        post_form.save()
-        formset.save()
-        return redirect('post_show', pk=post.pk)
-
-    return render(request, 'forum/update.html', {
-        'post_form': post_form,
-        'formset': formset,
-    })
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        post = self.get_object()
+        context['formset'] = PostImageFormSet(self.request.POST or None, self.request.FILES or None, instance=post)
+        return context
 
 class PostDeleteView(DeleteView):
     model = Posts

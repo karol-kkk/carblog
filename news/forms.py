@@ -7,7 +7,7 @@ from django.forms import inlineformset_factory
 class ArticlesForm(ModelForm):
     class Meta:
         model = Articles
-        fields = ['title', 'excerpt', 'body', 'published_at', 'thumbnail']
+        fields = ['title', 'excerpt', 'body', 'thumbnail']
 
         # Blok widgets zajmuje się definicją pól w HTML. Tutaj można definiować typy wyświetlanych pół oraz zarządzać ich atrybutami.
         widgets = {
