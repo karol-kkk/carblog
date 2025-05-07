@@ -1,33 +1,43 @@
 {% extends 'main/layout/layout.html' %}
 
-{% block title%}(#{{ article.id }}) {{ article.title }}{% endblock %}
+{% block title%} {{ article.title }}{% endblock %}
 
 {% block content %}
 
-    <div class="d-flex justify-content-between align-items-center w-100">
-        <h1>(#{{ article.id }}) {{ article.title }}</h1>
-        {% if request.user.id == article.author.id %}
-        <div>
-            <a href="/news/{{ article.id }}/update" class="btn btn-info">Update</a>
-            <a href="/news/{{ article.id }}/delete" class="btn btn-danger">Delete</a>
-
-        </div>
-        {% endif %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
+      <h1 class="h3 mb-0 text-dark">{{ article.title }}</h1>
+      {% if request.user.id == article.author.id %}
+      <div class="btn-group">
+        <a href="/news/{{ article.id }}/update" class="btn btn-outline-info">Update</a>
+        <a href="/news/{{ article.id }}/delete" class="btn btn-outline-danger">Delete</a>
+      </div>
+      {% endif %}
     </div>
-    <div class="d-flex flex-column gap-4">
-        <p>Published at: {{ article.published_at }}</p>
-        <p>{{ article.body }}</p>
-
-        {% if article.images.all %}
-            <div class="d-flex flex-wrap gap-3">
-                {% for img in article.images.all %}
-                    <div>
-                        <img src="{{ img.image.url }}" alt="Post image" style="max-width: 70%; height: auto;" class="">
-                        <p>{{ img.description }}</p>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-
+  
+    <div class="mb-3 text-muted">
+      <small>Author: {{ article.author }}</small><br>
+      <small>Published at: {{ article.published_at }}</small>
     </div>
+  
+    <div class="mb-3 d-flex justify-content-center">
+      <div class="text-center" style="max-width: 800px;">
+        <p class="lead">{{ article.body }}</p>
+      </div>
+    </div>
+  
+    {% if article.images.all %}
+    <div class="d-flex flex-column gap-3">
+      {% for img in article.images.all %}
+      <div class="w-100">
+        <img src="{{ img.image.url }}" alt="Post image" class="img-fluid w-100 rounded shadow">
+        <p class="mt-2 text-center text-muted">{{ img.description }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+  
+  
+  
 {% endblock %}

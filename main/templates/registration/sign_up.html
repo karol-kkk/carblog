@@ -4,14 +4,14 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="container mt-5 py-5">
-    <div class="card p-4">
+<div class="container my-5">
+    <div class="card p-4 gradient">
         <div class="card-body">
-            <form method="POST" class="form-group">
+            <form method="POST" class="form-group text-white">
                 {% csrf_token %}
                 {{ form|crispy }}
                 <p>Have an account? Log in <a href="/login">here!</a></p>
-                <button type="submit" class="btn btn-success">Register</button>
+                <button type="submit" class="btn gradient text-white border-secondary">Register</button>
             </form>
         </div>
     </div>
