@@ -20,9 +20,9 @@
     </style>
 </head>
 <body>
-    <div class="d-flex flex-column" style="min-height: 100vh;"> <!-- Make body fill the full height -->
+    <div class="d-flex flex-column" style="min-height: 100vh;"> 
         {% include 'main/layout/navbar.html' %}
-        <main class="py-0 flex-grow-1"> <!-- Main section that takes remaining space -->
+        <main class="py-0 flex-grow-1">
             <div class="container-fluid" style="min-width: 100%; padding: 0;">
                 {% block content %}
                 {% endblock %}
